@@ -22,7 +22,8 @@ func Get10Ships() []models.Ship {
 
 	subMsg := aisstream.SubscriptionMessage{
 		APIKey:        "f4f956742f6bddcdc52ccd035a66057aa80e4f3e",
-		BoundingBoxes: [][][]float64{{{-90.0, -180.0}, {90.0, 180.0}}},
+		BoundingBoxes: [][][]float64{{{63.7, 33.0}, {90.0, 180.0}}},	// Только русская арктика
+		// BoundingBoxes: [][][]float64{{{63.7, 0.0}, {90.0, 180.0}}},		// +  Скандинавия
 	}
 
 	subMsgBytes, _ := json.Marshal(subMsg)
@@ -32,7 +33,7 @@ func Get10Ships() []models.Ship {
 
 	ships := make([]models.Ship, 0, 10)
 
-	for len(ships) < 10 {
+	for len(ships) < 2 {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
 			log.Println("Read error:", err)
@@ -59,7 +60,7 @@ func Get10Ships() []models.Ship {
 			}
 
 			ships = append(ships, ship)
-			fmt.Printf("Собрано кораблей: %d/10\n", len(ships))
+			fmt.Printf("Собрано кораблей: %d/2\n", len(ships))
 		}
 	}
 
