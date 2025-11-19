@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arctic Route - Ships & Glaciers</title>
+    <link rel="stylesheet" href="/frontend/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🚢 Arctic Route Monitor 🧊</h1>
+        <p>Real-time ships and glaciers in the Arctic region</p>
+    </header>
+
+    <div class="controls">
+        <button id="loadData">Load Ships & Glaciers</button>
+        <div class="stats">
+            <span id="shipCount">Ships: 0</span>
+            <span id="glacierCount">Glaciers: 0</span>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="info-panel">
+        <h3>Legend</h3>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="ship-marker"></div>
+                <span>Ships</span>
+            </div>
+            <div class="legend-item">
+                <div class="glacier-marker"></div>
+                <span>Glaciers</span>
+            </div>
+        </div>
+
+        <div id="selectedInfo" class="selected-info">
+            <p>Click on a ship or glacier for details</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
