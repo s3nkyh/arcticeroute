@@ -22,7 +22,7 @@ func Get10Ships() []models.Ship {
 
 	subMsg := aisstream.SubscriptionMessage{
 		APIKey:        "f4f956742f6bddcdc52ccd035a66057aa80e4f3e",
-		BoundingBoxes: [][][]float64{{{65.0, 30.0}, {90.0, 180.0}}},
+		BoundingBoxes: [][][]float64{{{-90.0, -180.0}, {90.0, 180.0}}},
 	}
 
 	subMsgBytes, _ := json.Marshal(subMsg)

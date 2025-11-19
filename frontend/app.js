@@ -52,7 +52,7 @@ async function loadData() {
         console.log('✅ Raw glaciers data:', glaciers);
 
         addShipsToMap(ships);
-        addGlaciersToMap(glaciers);
+        // addGlaciersToMap(glaciers);  // Тупой Артём просто закомментировал отображение статичных ледников
 
         document.getElementById('shipCount').textContent = `Ships: ${shipMarkers.length}`;
         document.getElementById('glacierCount').textContent = `Glaciers: ${glacierMarkers.length}`;
@@ -248,6 +248,10 @@ window.addEventListener('error', function(e) {
 });
 
 map.setView([75.0, 40.0], 4);
+
+//  Удаление надоедливого флага 😇
+const elements = document.querySelectorAll('.leaflet-control-attribution.leaflet-control');
+elements.forEach(element => { element.remove(); });
 
 console.log('🗺️ Map initialized');
 console.log('📍 API Base:', API_BASE);
