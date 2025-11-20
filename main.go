@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/s3nkyh/arcticeroute/api"
+	"github.com/s3nkyh/arcticeroute/service"
 )
 
 func main() {
@@ -23,6 +24,7 @@ func main() {
 
 	apiGroup := r.Group("/api")
 	{
+		apiGroup.GET("/points", getPoints)
 		apiGroup.GET("/ships", getShips)
 		apiGroup.GET("/glaciers", getGlaciers)
 		apiGroup.GET("/health", healthCheck)
@@ -44,6 +46,11 @@ func main() {
 	if err := r.Run(port); err != nil {
 		log.Fatal("Server failed to start:", err)
 	}
+}
+
+func getPoints(c *gin.Context) {
+	points := service.GetPoints()
+	c.JSON(200, points)
 }
 
 func getShips(c *gin.Context) {

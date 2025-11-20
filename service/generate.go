@@ -2,13 +2,9 @@ package service
 
 import "github.com/s3nkyh/arcticeroute/models"
 
-func init() {
-
-}
-
 var (
-	murmansk = models.Point{
-		"Murmansk",
+	dikson = models.Point{
+		"Dikson",
 		68.97,
 		68.97,
 	}
@@ -22,4 +18,13 @@ var (
 		68.65,
 		43.26,
 	}
+	murmansk = models.Point{
+		"Murmansk",
+		68.97,
+		33.07,
+	}
 )
+
+func GetPoints() []models.Point {
+	return []models.Point{dikson, arkhangelsk, kaninNos, murmansk}
+}

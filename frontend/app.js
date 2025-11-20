@@ -31,40 +31,18 @@ async function loadData() {
     try {
         clearMarkers();
 
-        console.log('🚢 Fetching ships...');
-        const shipsResponse = await fetch(`${API_BASE}/api/ships`);
+        console.log('🚢 Fetching points...');
+        const pointsResponse = await fetch(`${API_BASE}/api/points`);
 
-        if (!shipsResponse.ok) {
-            throw new Error(`Ships HTTP error! status: ${shipsResponse.status}`);
+        if (!pointsResponse.ok) {
+            throw new Error(`Points HTTP error! status: ${pointsResponse.status}`);
         }
 
-        const ships = await shipsResponse.json();
-        console.log('✅ Raw ships data:', ships);
+        const points = await pointsResponse.json();
+        console.log('✅ Raw points data:', points);
 
-        console.log('🧊 Fetching glaciers...');
-        const glaciersResponse = await fetch(`${API_BASE}/api/glaciers?bbox=65,30,90,180`);
-
-        if (!glaciersResponse.ok) {
-            throw new Error(`Glaciers HTTP error! status: ${glaciersResponse.status}`);
-        }
-
-        const glaciers = await glaciersResponse.json();
-        console.log('✅ Raw glaciers data:', glaciers);
-
-        addShipsToMap(ships);
+        addPointsToMap(points);
         // addGlaciersToMap(glaciers);  // Тупой Артём просто закомментировал отображение статичных ледников
-
-        document.getElementById('shipCount').textContent = `Ships: ${shipMarkers.length}`;
-        document.getElementById('glacierCount').textContent = `Glaciers: ${glacierMarkers.length}`;
-
-        const allMarkers = [...shipMarkers, ...glacierMarkers];
-        if (allMarkers.length > 0) {
-            const group = new L.featureGroup(allMarkers);
-            map.fitBounds(group.getBounds().pad(0.1));
-            console.log(`🗺️ Map fitted to ${allMarkers.length} markers`);
-        } else {
-            console.warn('❌ No valid markers to display');
-        }
 
     } catch (error) {
         console.error('❌ Error loading data:', error);
@@ -75,28 +53,27 @@ async function loadData() {
     }
 }
 
-function addShipsToMap(ships) {
-    if (!ships || !Array.isArray(ships)) {
-        console.error('❌ Invalid ships data:', ships);
+function addPointsToMap(points) {
+    if (!points || !Array.isArray(points)) {
+        console.error('❌ Invalid points data:', points);
         return;
     }
 
-    let validShips = 0;
-    let invalidShips = 0;
+    let validPoints = 0;
+    let invalidPoints = 0;
 
-    ships.forEach((ship, index) => {
-        console.log(`🔍 Ship ${index}:`, ship);
+    points.forEach((point, index) => {
+        console.log(`🔍 Ship ${index}:`, point);
 
-        const lat = ship.latitude || ship.Latitude || ship.lat;
-        const lon = ship.longitude || ship.Longitude || ship.lon;
-        const name = ship.name || ship.Name || `Ship ${ship.mmsi || ship.MMSI}`;
-        const mmsi = ship.mmsi || ship.MMSI;
+        const lat = point.latitude || point.Latitude || point.lat;
+        const lon = point.longitude || point.Longitude || point.lon;
+        const name = point.name || point.Name;
 
-        console.log(`📡 Ship ${index} coordinates:`, { lat, lon, name, mmsi });
+        console.log(`📡 Points ${index} coordinates:`, { lat, lon, name });
 
         if (!isValidCoordinate(lat, lon)) {
-            console.warn(`❌ Invalid ship coordinates: ${name} (${lat}, ${lon})`);
-            invalidShips++;
+            console.warn(`❌ Invalid points coordinates: ${name} (${lat}, ${lon})`);
+            invalidPoints++;
             return;
         }
 
@@ -107,7 +84,6 @@ function addShipsToMap(ships) {
                     <div class="ship-popup">
                         <h3>${name}</h3>
                         <div class="popup-info">
-                            <strong>MMSI:</strong> ${mmsi || 'N/A'}<br>
                             <strong>Position:</strong> ${lat.toFixed(4)}, ${lon.toFixed(4)}
                         </div>
                     </div>
@@ -116,23 +92,22 @@ function addShipsToMap(ships) {
             marker.on('click', () => {
                 document.getElementById('selectedInfo').innerHTML = `
                     <h4>🚢 ${name}</h4>
-                    <p><strong>MMSI:</strong> ${mmsi || 'N/A'}</p>
                     <p><strong>Latitude:</strong> ${lat.toFixed(6)}</p>
                     <p><strong>Longitude:</strong> ${lon.toFixed(6)}</p>
                 `;
             });
 
             shipMarkers.push(marker);
-            validShips++;
-            console.log(`✅ Added ship: ${name}`);
+            validPoints++;
+            console.log(`✅ Added point: ${name}`);
 
         } catch (error) {
-            console.error(`❌ Error adding ship ${name}:`, error);
-            invalidShips++;
+            console.error(`❌ Error adding point ${name}:`, error);
+            invalidPoints++;
         }
     });
 
-    console.log(`📊 Ships summary: ${validShips} valid, ${invalidShips} invalid`);
+    console.log(`📊 Points summary: ${validPoints} valid, ${invalidPoints} invalid`);
 }
 
 function addGlaciersToMap(glaciers) {
